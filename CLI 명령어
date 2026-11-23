@@ -1,0 +1,14 @@
+
+CLI 표시  모드  기능
+
+Router>  User EXEC  기본 명령어
+
+Router#  Privileged EXEC  상태 확인 및 관리
+
+Router(config)#  Global Configuration  전체 설정
+
+Router(config-if)#  Interface Configuration  포트 설정
+
+Router(config-line)#  Line Configuration  콘솔 및 원격 접속 설정
+
+Router(config-router)#  Router Configuration  라우팅 프로토콜 설정
