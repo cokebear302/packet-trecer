@@ -12,3 +12,1093 @@ Router(config-if)#  Interface Configuration  포트 설정
 Router(config-line)#  Line Configuration  콘솔 및 원격 접속 설정
 
 Router(config-router)#  Router Configuration  라우팅 프로토콜 설정
+---------------------------------------------------------------
+
+기본 명령어 
+
+명령어  기능
+
+enable  관리자 모드 진입
+
+disable  사용자 모드로 이동
+
+configure terminal  설정 모드 진입
+
+exit  이전 모드로 이동
+
+end  관리자 모드로 바로 이동
+
+logout  CLI 접속 종료
+
+hostname R1  장비 이름 변경
+
+do show ip interface brief  설정 모드에서 상태 확인
+
+?  사용 가능한 명령어 확인
+
+show history  이전 명령어 확인
+
+no 명령어  기존 설정 취소 또는 기능 비활성화
+
+copy running-config startup-config  설정 저장
+
+
+***중요***
+enable
+configure terminal
+end
+show running-config
+copy running-config startup-config
+***중요***
+---------------------------------------------------------------
+router 명령어 # 서로 다른 네트워크를 연결하는 장비
+
+인터페이스 설정
+
+명령어  기능
+
+show ip interface brief  모든 인터페이스 상태 확인
+
+show interfaces  인터페이스 상세 정보
+
+interface gigabitEthernet 0/0  G0/0 선택
+
+ip address 192.168.1.1 255.255.255.0  IP 주소 설정
+
+no shutdown  포트 활성화
+
+shutdown  포트 비활성화
+
+description LAN  인터페이스 설명
+
+show interfaces g0/0  특정 포트 확인
+
+routing 명령어 
+
+명령어  기능
+
+show ip route  라우팅 테이블 확인
+
+show ip protocols  라우팅 프로토콜 확인
+
+ip route  정적 경로 설정
+
+no ip route  정적 경로 삭제
+
+show arp  ARP 테이블 확인
+
+
+3. Switch 명령어
+스위치는 PC, 서버, 라우터 등을 연결하는 장비입니다.
+
+3-1. 기본 스위치 확인
+명령어
+
+기능
+
+show mac address-table
+
+MAC 주소 테이블 확인
+
+show interfaces status
+
+포트 상태 확인
+
+show interfaces
+
+인터페이스 상세 정보
+
+show vlan brief
+
+VLAN 목록 확인
+
+show running-config
+
+현재 설정 확인
+
+show version
+
+장비 버전 확인
+
+show cdp neighbors
+
+주변 Cisco 장비 확인
+
+show spanning-tree
+
+STP 상태 확인
+
+3-2. 스위치 포트 설정
+
+bash
+enable
+configure terminal
+
+interface fastEthernet 0/1
+description PC0
+switchport mode access
+no shutdown
+
+end
+주요 명령어:
+
+명령어
+
+기능
+
+interface fa0/1
+
+FastEthernet 0/1 선택
+
+interface range fa0/1-10
+
+여러 포트 선택
+
+switchport mode access
+
+Access 포트 설정
+
+switchport mode trunk
+
+Trunk 포트 설정
+
+shutdown
+
+포트 비활성화
+
+no shutdown
+
+포트 활성화
+
+description PC0
+
+포트 설명
+
+show interfaces fa0/1
+
+특정 포트 상태 확인
+
+3-3. VLAN 설정
+VLAN은 하나의 스위치를 논리적인 여러 네트워크로 분리하는 기술입니다.
+
+Jasa Pembuatan Topologi/Simulasi Jaringan Komputer pada Cisco Packet Tracer
+ 
+VLAN 10 생성:
+
+
+bash
+enable
+configure terminal
+
+vlan 10
+name HR
+exit
+VLAN 20 생성:
+
+
+bash
+vlan 20
+name DEVELOPMENT
+exit
+포트에 VLAN 할당:
+
+
+bash
+interface fastEthernet 0/1
+switchport mode access
+switchport access vlan 10
+exit
+다른 포트에 VLAN 20 할당:
+
+
+bash
+interface fastEthernet 0/2
+switchport mode access
+switchport access vlan 20
+exit
+확인:
+
+
+bash
+show vlan brief
+3-4. Trunk 설정
+Trunk는 여러 VLAN의 트래픽을 하나의 물리적인 연결로 전달하는 기능입니다.
+
+
+bash
+configure terminal
+
+interface gigabitEthernet 0/1
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+no shutdown
+exit
+확인 명령어:
+
+
+bash
+show interfaces trunk
+show interfaces gigabitEthernet 0/1 switchport
+3-5. Port Security
+Port Security는 스위치 포트에 연결할 수 있는 MAC 주소를 제한하는 기능입니다.
+
+
+bash
+configure terminal
+
+interface fastEthernet 0/1
+switchport mode access
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+exit
+확인 명령어:
+
+
+bash
+show port-security
+show port-security interface fa0/1
+show port-security address
+명령어
+
+기능
+
+maximum 1
+
+허용 MAC 주소 최대 1개
+
+mac-address sticky
+
+연결된 MAC 주소 학습
+
+violation protect
+
+위반 트래픽 폐기
+
+violation restrict
+
+폐기 및 위반 카운트 증가
+
+violation shutdown
+
+포트 비활성화
+
+4. ACL 명령어 (접근 제어)
+보안 핵심 영역
+ACL(Access Control List)은 네트워크 트래픽을 허용하거나 차단하는 기능입니다.
+
+예를 들어 특정 PC가 특정 네트워크에 접근하지 못하게 설정할 수 있습니다.
+
+4-1. Standard ACL
+Standard ACL은 주로 출발지 IP 주소를 기준으로 통신을 제어합니다.
+
+
+bash
+configure terminal
+
+access-list 10 deny host 192.168.1.10
+access-list 10 permit any
+
+interface gigabitEthernet 0/0
+ip access-group 10 in
+
+end
+4-2. Extended ACL
+Extended ACL은 출발지와 목적지 IP, 프로토콜, 포트 등을 기준으로 통신을 제어할 수 있습니다.
+
+예를 들어 특정 네트워크에서 다른 네트워크로 가는 HTTP 통신을 제한하는 예제입니다.
+
+
+bash
+configure terminal
+
+access-list 101 deny tcp 192.168.1.0 0.0.0.255 192.168.2.0 0.0.0.255 eq 80
+access-list 101 permit ip any any
+
+interface gigabitEthernet 0/0
+ip access-group 101 in
+
+end
+주요 명령어:
+
+명령어
+
+기능
+
+access-list
+
+ACL 생성
+
+permit
+
+통신 허용
+
+deny
+
+통신 차단
+
+host
+
+특정 IP 지정
+
+any
+
+모든 주소 지정
+
+eq 80
+
+TCP/UDP 포트 80 지정
+
+ip access-group
+
+인터페이스에 ACL 적용
+
+show access-lists
+
+ACL 확인
+
+no access-list 10
+
+ACL 삭제
+
+주의: ACL은 위에서부터 순서대로 검사하며, 명시적으로 허용되지 않은 트래픽은 마지막에 암묵적으로 차단됩니다. 실습할 때는 기존 통신에 영향을 주지 않도록 적용 방향과 순서를 확인하세요.
+
+5. DHCP 명령어
+DHCP는 PC에 IP 주소를 자동으로 할당하는 서비스입니다.
+
+Cisco DHCP Configuration in Packet Tracer for Automatic IP Assignment | Vivek Chavan posted on the topic | LinkedIn
+ 
+라우터에서 DHCP 서버를 구성하는 예제입니다.
+
+
+bash
+configure terminal
+
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+
+ip dhcp pool LAN
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 8.8.8.8
+exit
+확인 명령어:
+
+
+bash
+show ip dhcp binding
+show ip dhcp pool
+show running-config
+명령어
+
+기능
+
+ip dhcp pool
+
+DHCP 주소 풀 생성
+
+network
+
+할당할 네트워크 지정
+
+default-router
+
+기본 게이트웨이 지정
+
+dns-server
+
+DNS 서버 지정
+
+ip dhcp excluded-address
+
+할당 제외 주소 설정
+
+show ip dhcp binding
+
+할당된 주소 확인
+
+6. DNS 및 NAT 명령어
+6-1. DNS 관련 명령어
+라우터에서 DNS 조회 기능을 끄려면 다음과 같이 입력합니다.
+
+
+bash
+configure terminal
+no ip domain-lookup
+이 설정은 잘못 입력한 명령어를 DNS 이름으로 해석하려는 동작을 방지합니다.
+
+6-2. NAT 설정
+NAT는 내부 사설 IP 주소를 외부 네트워크에서 사용할 주소로 변환하는 기능입니다.
+
+PAT 예제:
+
+
+bash
+configure terminal
+
+access-list 1 permit 192.168.1.0 0.0.0.255
+
+interface gigabitEthernet 0/0
+ip nat inside
+exit
+
+interface gigabitEthernet 0/1
+ip nat outside
+exit
+
+ip nat inside source list 1 interface gigabitEthernet 0/1 overload
+확인:
+
+
+bash
+show ip nat translations
+show ip nat statistics
+이 예제는 G0/0이 내부망, G0/1이 외부망인 경우입니다. 실제 인터페이스 구성에 맞춰야 합니다.
+
+7. SSH 및 장비 관리 보안 명령어
+대회 중요 영역
+Telnet보다 암호화된 SSH를 사용하는 것이 안전합니다.
+
+SSH 설정 예제
+
+bash
+enable
+configure terminal
+
+hostname R1
+ip domain-name lab.local
+
+username admin secret StrongPass123!
+
+crypto key generate rsa
+RSA 키 생성 과정에서 크기를 물으면 지원되는 값 중 1024 또는 2048을 선택합니다.
+
+
+bash
+ip ssh version 2
+
+line vty 0 4
+login local
+transport input ssh
+exit
+
+end
+확인:
+
+
+bash
+show ip ssh
+show ssh
+show running-config
+비밀번호 관련 명령어
+명령어
+
+기능
+
+enable secret 비밀번호
+
+관리자 모드 비밀번호 설정
+
+username admin secret 비밀번호
+
+사용자 계정 생성
+
+service password-encryption
+
+설정 파일의 일부 평문 비밀번호 난독화
+
+login local
+
+로컬 계정 인증 사용
+
+transport input ssh
+
+SSH만 허용
+
+exec-timeout 5 0
+
+5분 동안 입력이 없으면 세션 종료
+
+주의할 점은 service password-encryption이 강력한 암호화 기능은 아니라는 것입니다. 중요한 계정에는 secret 기반 인증을 사용하고 강한 비밀번호를 설정해야 합니다.
+
+8. 라우터 보안 및 관리 명령어
+명령어
+
+기능
+
+show users
+
+접속 사용자 확인
+
+show logging
+
+시스템 로그 확인
+
+show processes
+
+프로세스 정보 확인
+
+show clock
+
+시간 확인
+
+show cdp neighbors
+
+주변 장비 확인
+
+show ip arp
+
+ARP 테이블 확인
+
+show access-lists
+
+접근 제어 목록 확인
+
+show version
+
+장비 및 IOS 정보 확인
+
+banner motd #Authorized users only#
+
+접속 경고 메시지 설정
+
+콘솔 접속 보호 예제:
+
+
+bash
+configure terminal
+
+line console 0
+password ConsolePass123!
+login
+exec-timeout 5 0
+exit
+9. STP 및 네트워크 안정성 명령어
+STP(Spanning Tree Protocol)는 스위치 사이에 연결 루프가 발생하는 것을 방지하는 기술입니다.
+
+명령어
+
+기능
+
+show spanning-tree
+
+STP 상태 확인
+
+show spanning-tree vlan 10
+
+특정 VLAN의 STP 확인
+
+spanning-tree portfast
+
+단말 연결 포트의 전환 시간 단축
+
+spanning-tree bpduguard enable
+
+PortFast 포트에서 BPDU 수신 시 보호
+
+show etherchannel summary
+
+EtherChannel 상태 확인
+
+PC와 서버처럼 단말이 연결된 Access 포트에서 PortFast와 BPDU Guard를 함께 사용하는 것이 일반적입니다. 스위치 간 연결 포트에는 무분별하게 적용하지 마세요.
+
+10. PC 명령어 (End Device)
+라우터와 스위치뿐 아니라 Packet Tracer의 PC에서도 명령어를 사용할 수 있습니다.
+
+PC를 클릭하고 Desktop → Command Prompt로 이동하세요.
+
+명령어
+
+기능
+
+ipconfig
+
+IP 설정 확인
+
+ipconfig /all
+
+상세 IP 설정 확인
+
+ipconfig /renew
+
+DHCP 주소 갱신
+
+ping 192.168.1.1
+
+통신 확인
+
+tracert 192.168.2.10
+
+통신 경로 확인
+
+arp -a
+
+ARP 테이블 확인
+
+arp -d
+
+ARP 캐시 삭제
+
+nslookup example.com
+
+DNS 조회
+
+netstat
+
+네트워크 연결 정보 확인
+
+help
+
+지원 명령어 확인
+
+Practicas de Cisco Packet Tracer
+ 
+자주 사용하는 명령어 실습
+① IP 주소 확인
+
+
+bash
+ipconfig
+② 통신 확인
+
+
+bash
+ping 192.168.1.1
+③ 통신 경로 확인
+
+
+bash
+tracert 192.168.2.10
+④ MAC 주소 확인
+
+
+bash
+arp -a
+⑤ DNS 확인
+
+
+bash
+nslookup google.com
+참고로 Packet Tracer의 PC는 일반 Windows나 Linux와 달리 일부 명령어만 지원합니다. 지원되지 않는 명령어는 help로 확인하세요.
+
+11. 서버(Server) 설정 명령어 및 기능
+Packet Tracer에서는 서버 장비를 클릭해서 여러 서비스를 설정할 수 있습니다.
+
+Cisco Packet Tracer: Configurando Servidores DHCP, DNS e HTTP | by João Pedro Ferrari | Medium
+ 
+서버를 클릭한 다음 Services 탭으로 이동합니다.
+
+서비스
+
+기능
+
+DHCP
+
+IP 주소 자동 할당
+
+DNS
+
+도메인 이름 조회
+
+HTTP
+
+웹 서비스
+
+HTTPS
+
+암호화된 웹 서비스
+
+FTP
+
+파일 전송
+
+TFTP
+
+간단한 파일 전송
+
+EMAIL
+
+이메일 서비스
+
+이 기능들은 서버의 Services 메뉴에서 활성화하고 설정합니다. 라우터 CLI에서 입력하는 명령어와는 다릅니다.
+
+12. Router-on-a-Stick 명령어
+이 기능은 VLAN을 공부할 때 반드시 알아두면 좋습니다.
+
+라우터의 물리적인 인터페이스 하나에 여러 개의 논리적 인터페이스를 만들어 서로 다른 VLAN 간 통신을 가능하게 합니다.
+
+Fa0
+Fa0/3
+2900-24TT
+Fa0/1 Switch Fa0/2
+2911
+Router0
+Gi0/0.10 -> 192.168.10.1/24
+Gi0/0.20 -> 192.168.20.1/24
+Gig0/0
+TRUNK Ports
+Fa0/4
+Fa0/3
+2960 241
+Switch 1
+Fa0/2
+Fa0/1
+VLAN 10
+VLAN 20
+VLAN 10
+VLAN 20
+Fa0
+Fa0
+Fa0
+PC-PT
+PC0
+Laptop-PT
+Laptop0
+Laptop-PT
+Laptop1
+Laptop-PT
+Laptop2
+192.168.20.20/24
+192.168.10.10/24
+192.168.20.10/24
+192.168.10.20/24
+ 
+예제:
+
+
+bash
+enable
+configure terminal
+
+interface gigabitEthernet 0/0
+no shutdown
+exit
+
+interface gigabitEthernet 0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.1 255.255.255.0
+exit
+
+interface gigabitEthernet 0/0.20
+encapsulation dot1Q 20
+ip address 192.168.20.1 255.255.255.0
+exit
+
+end
+스위치에서 라우터와 연결된 포트는 Trunk로 설정해야 합니다.
+
+
+bash
+configure terminal
+
+interface gigabitEthernet 0/1
+switchport mode trunk
+switchport trunk allowed vlan 10,20
+no shutdown
+
+end
+확인:
+
+
+bash
+show ip interface brief
+show interfaces trunk
+show vlan brief
+13. 장애 해결 명령어
+대회에서는 네트워크를 구성하는 것뿐 아니라 문제가 생겼을 때 빠르게 원인을 찾는 것도 중요합니다.
+
+명령어
+
+확인하는 내용
+
+show ip interface brief
+
+포트 상태
+
+show interfaces
+
+인터페이스 상세 정보
+
+show ip route
+
+라우팅 경로
+
+show arp
+
+IP와 MAC 연결 정보
+
+show mac address-table
+
+스위치 MAC 주소
+
+show vlan brief
+
+VLAN 구성
+
+show interfaces trunk
+
+Trunk 상태
+
+show access-lists
+
+ACL 설정
+
+show running-config
+
+현재 설정
+
+show startup-config
+
+저장된 설정
+
+show logging
+
+시스템 로그
+
+문제가 생기면 이 순서로 확인하세요.
+
+show ip interface brief — 포트가 정상인가?
+
+show vlan brief — VLAN이 올바른가?
+
+show interfaces trunk — Trunk가 정상인가?
+
+show ip route — 목적지 경로가 있는가?
+
+show access-lists — ACL이 통신을 차단하지 않는가?
+
+show running-config — 설정이 제대로 적용됐는가?
+
+14. 설정 저장 명령어
+실습을 마쳤으면 설정을 저장해야 합니다.
+
+
+bash
+copy running-config startup-config
+또는
+
+
+bash
+write memory
+용어
+
+의미
+
+Running-config
+
+현재 작동 중인 설정
+
+Startup-config
+
+재부팅 후 불러오는 저장 설정
+
+Packet Tracer 프로젝트 파일 자체는 File → Save 또는 Ctrl + S로 .pkt 파일에 저장하세요.
+
+15. 대회 대비 필수 명령어 암기표
+지금까지 정리한 명령어 중 우선순위가 높은 것들을 모았습니다.
+
+우선 암기할 명령어 30개
+번호
+
+명령어
+
+중요도
+
+1
+
+enable
+
+필수
+
+2
+
+configure terminal
+
+필수
+
+3
+
+hostname R1
+
+필수
+
+4
+
+interface g0/0
+
+필수
+
+5
+
+ip address
+
+필수
+
+6
+
+no shutdown
+
+필수
+
+7
+
+show ip interface brief
+
+필수
+
+8
+
+show running-config
+
+필수
+
+9
+
+copy running-config startup-config
+
+필수
+
+10
+
+show ip route
+
+필수
+
+11
+
+ip route
+
+중요
+
+12
+
+router ospf 1
+
+중요
+
+13
+
+vlan 10
+
+필수
+
+14
+
+switchport mode access
+
+필수
+
+15
+
+switchport access vlan 10
+
+필수
+
+16
+
+switchport mode trunk
+
+필수
+
+17
+
+show vlan brief
+
+필수
+
+18
+
+show interfaces trunk
+
+중요
+
+19
+
+show mac address-table
+
+중요
+
+20
+
+switchport port-security
+
+중요
+
+21
+
+access-list
+
+필수
+
+22
+
+ip access-group
+
+필수
+
+23
+
+show access-lists
+
+필수
+
+24
+
+ip dhcp pool
+
+중요
+
+25
+
+username admin secret
+
+중요
+
+26
+
+crypto key generate rsa
+
+중요
+
+27
+
+transport input ssh
+
+중요
+
+28
+
+show ip ospf neighbor
+
+중요
+
+29
+
+ping
+
+필수
+
+30
+
+tracert
+
+필수
+
+16. 추천 학습 방법
+명령어를 한꺼번에 외우려고 하지 마세요.
+
+다음 순서대로 실제로 입력해 보는 것이 좋습니다.
+
+1일차: Router 기본 설정 및 IP 주소 설정
+
+2일차: Switch 기본 설정 및 VLAN
+
+3일차: Trunk 및 Inter-VLAN Routing
+
+4일차: Static Routing 및 OSPF
+
+5일차: ACL 및 Port Security
+
+6일차: SSH 및 장비 보안
+
+7일차: 종합 네트워크 구축 및 장애 해결
